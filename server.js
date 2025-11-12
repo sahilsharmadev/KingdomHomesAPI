@@ -5,8 +5,8 @@ const cors = require("cors");
 const path = require("path");
 const compression = require("compression");
 const sharp = require("sharp");
-const adminAuth = require("./routes/adminAuth");
-const contactForm = require("./routes/contactForm");
+const adminAuth = require("./adminAuth");
+const contactForm = require("./contactForm");
 
 require("dotenv").config();
 
@@ -123,3 +123,4 @@ app.delete("/api/gallery/:id", (req, res) => {
 app.listen(PORT, () =>
   console.log(`✅ Server running on http://localhost:${PORT}`)
 );
+
