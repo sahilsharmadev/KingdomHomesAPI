@@ -44,6 +44,14 @@ const readGallery = () =>
 const saveGallery = (data) =>
   fs.writeFileSync(GALLERY_FILE, JSON.stringify(data, null, 2));
 
+// Ensure uploads folder exists
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+  console.log("📁 uploads folder created");
+}
+
+
 // ✅ Multer storage setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -76,8 +84,11 @@ app.post("/api/gallery/upload", upload.single("image"), async (req, res) => {
       .jpeg({ quality: 75 }) // Compress quality to 75%
       .toFile(optimizedPath);
 
-    // Remove original large file
-    fs.unlinkSync(req.file.path);
+   setTimeout(() => {
+  fs.unlink(req.file.path, (err) => {
+    if (err) console.log("⚠ File delete warning:", err.message);
+  });
+}, 50);
 
     const newImage = {
       id: Date.now(),
